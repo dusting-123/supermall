@@ -9,7 +9,7 @@
       <template #item-icon ><img  src="../../../assets/img/tabbar/category.svg" alt="" ></template>
       <template #item-icon-active ><img  src="../../../assets/img/tabbar/category_active.svg" alt="" ></template>
       <template #item-text > <div >分类</div></template>
-    </Tab-bar-item>
+    </tab-bar-item>
     <tab-bar-item path="/cart">
       <template #item-icon ><img  src="../../../assets/img/tabbar/shopcart.svg" alt="" ></template>
       <template #item-icon-active ><img  src="../../../assets/img/tabbar/shopcart_active.svg" alt="" ></template>
