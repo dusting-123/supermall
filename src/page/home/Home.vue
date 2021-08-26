@@ -5,7 +5,13 @@
         <div>首页</div>
       </template>
     </nav-bar>
-    
+    <tab-control
+          class="tab-control" 
+          :titles="['流行','新款','精选']"
+          ref="tabControl1"
+          @tabClick="tabClick"
+          v-show="isTabFixed"
+        />
     <scroll 
       class="wrapper"
       ref="scroll"
@@ -15,12 +21,12 @@
       @pullingUp="loadMore"
     >
       <template #wrapper>
-        <home-swiper :banners="banners" />
+        <home-swiper :banners="banners" @swiperImageLoad="swiperImageLoad" />
         <recommend-view :recommends="recommends" />
         <feature-view />
         <tab-control
-          class="tab-control" 
           :titles="['流行','新款','精选']"
+          ref="tabControl2"
           @tabClick="tabClick"
         />
         <goods-list :goods="showGoods" />
@@ -43,7 +49,7 @@ import BackTop from '../../components/content/backtop/BackTop'
 
 
 import {getHomeMultidata, getHomeGoods} from '../../network/home'
-
+import {debounce} from '../../common/utils'
 export default {
   name: 'Home',
   components: {
@@ -58,7 +64,6 @@ export default {
   },
   data() {
     return {
-      tabOffsetTop: 0,
       banners: [],
       recommends: [],
       goods: {
@@ -67,7 +72,10 @@ export default {
         'sell': {page: 0, list:[]},
       },
       currentType:'pop',
-      isShowBackTop:true
+      isShowBackTop:true,
+      tabOffsetTop: 0,
+      isTabFixed:false,
+      saveY: 0
     }
   },
   created() {
@@ -77,6 +85,27 @@ export default {
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
+    
+  },
+  mounted() {
+    //监听图片加载完成
+    const refresh = debounce(this.$refs.scroll.refresh(),0)
+    this.$bus.$on('itemImageLoad',()=>{
+     refresh()
+    })
+    //获取tabControl的offsetTop
+   // this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
+   
+  },
+  destroyed() {
+    console.log('home destroyed');
+  },
+  activated() {
+    this.$refs.scroll.scrollTo(0,this.saveY,0)
+    this.$refs.scroll.refresh()
+  },
+  deactivated() {
+    this.saveY = this.$refs.scroll.getScrollY()
   },
   computed: {
     showGoods() {
@@ -85,6 +114,7 @@ export default {
   },
   methods: {
     /* 事件监听相关 */
+    
     tabClick(index) {
       switch (index) {
         case 0:
@@ -97,20 +127,26 @@ export default {
           this.currentType = 'sell'
           break
       }
+      this.$refs.tabControl1.currentIndex = index
+      this.$refs.tabControl2.currentIndex = index
     },
     backClick() {
       this.$refs.scroll.scrollTo(0,0,500)
     },
     contentScroll(position) {
-        this.isShowBackTop = (-position.y)>1000
+      //判断BackTop是否显示
+      this.isShowBackTop = (-position.y) > 1000
+      //判断tabControl是否吸顶
+      this.isTabFixed = (-position.y) > this.tabOffsetTop
     },
     loadMore(){
       this.getHomeGoods(this.currentType)
-      this.$refs.scroll.scroll.refresh()
+      this.$refs.scroll.refresh()
     },
-/*     swiperImageLoad() {
-      //this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop;
-    }, */
+    swiperImageLoad() {
+      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop;
+      console.log(this.tabOffsetTop);
+    },
   /**
   * 网络请求相关的方法
   */
@@ -120,6 +156,7 @@ export default {
         this.recommends = res.data.recommend.list;
       })
     },
+    //请求商品数据
     getHomeGoods(type) {
       const page = this.goods[type].page + 1
       getHomeGoods(type, page).then(res => {
@@ -142,19 +179,20 @@ export default {
  .home-nav{
    background-color:#ff8198;
    color: #fff;
-   overflow: hidden;
-   position: fixed;
-   top: 0;
-   left: 0;
-   right: 0;
-  z-index: 5;
+    /*在使用浏览器原生滚动时, 为了让导航不跟随一起滚动*/
+    /*position: fixed;*/
+    /*left: 0;*/
+    /*right: 0;*/
+    /*top: 0;*/
+    /*z-index: 9;*/
  }
  .tab-control {
-  
+  position: relative;
+  z-index: 9;
  }
  /* 方案一 */
  .wrapper {
-   overflow: hidden;
+  overflow: hidden;
    position: absolute;
    top: 44px;
    bottom: 49px;
