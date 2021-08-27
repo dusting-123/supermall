@@ -1,10 +1,15 @@
 <template>
   <div class="detail">
     <!-- <div>{{ location }}</div> -->
-    <detail-nav-bar />
-    <detail-swiper :top-images="topImages" />
-    <detail-base-info :goods="goods" />
-    <detail-shop-info :shop="shop" />
+    <detail-nav-bar class="detail-nav" />
+    <scroll class="wrapper" :pull-up-load="true">
+      <template #wrapper>
+        <detail-swiper :top-images="topImages" />
+        <detail-base-info :goods="goods" />
+        <detail-shop-info :shop="shop" />
+        <detail-goods-info :detail-info="detailInfo"/>
+      </template>
+    </scroll>
   </div>
 </template>
 
@@ -15,6 +20,10 @@ import DetailNavBar from "./childComps/DetailNavBar";
 import DetailSwiper from "./childComps/DetailSwiper";
 import DetailBaseInfo from "./childComps/DetailBaseInfo";
 import DetailShopInfo from "./childComps/DetailShopInfo";
+import DetailGoodsInfo from './childComps/DetailGoodsInfo';
+
+import Scroll from "../../components/common/scroll/Scroll"
+
 
 export default {
   name:'Detail',
@@ -23,6 +32,8 @@ export default {
     DetailSwiper,
     DetailBaseInfo,
     DetailShopInfo,
+    DetailGoodsInfo, 
+    Scroll
   },
   data() {
     return {
@@ -31,6 +42,7 @@ export default {
       topImages: [],
       goods: {},
       shop: {},
+      detailInfo:{}
     };
   },
   created() {},
@@ -51,11 +63,13 @@ export default {
         data.shopInfo.services
       );
       //创建店铺信息
-      this.Shop = new Shop(data.shopInfo);
+      this.shop = new Shop(data.shopInfo);
+      //获取商品详情数据
+      this.detailInfo = data.detailInfo
     });
   },
-  updated(rpops) {
-    console.log("rpops: ", rpops);
+  updated() {
+    // console.log("rpops: ", rpops);
   },
   methods: {},
   computed: {
@@ -69,6 +83,26 @@ export default {
   },
 };
 </script>
-
-<style>
+ 
+<style scoped>
+  .detail{
+    position: relative;
+    z-index: 5;
+    height: 100vh;
+    background-color: #fff;
+  }
+  .detail-nav {
+    position: relative;
+    z-index: 5;
+    background-color: #fff;
+  }
+  .wrapper {
+    /* overflow: hidden;
+    position: absolute;
+    top: 44px;
+    bottom: 0;
+    left: 0;
+    right: 0; */
+    height: calc(100% - 44px);
+  }
 </style>
