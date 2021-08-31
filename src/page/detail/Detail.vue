@@ -2,27 +2,30 @@
   <div class="detail">
     <!-- <div>{{ location }}</div> -->
     <detail-nav-bar class="detail-nav" />
-    <scroll class="wrapper" :pull-up-load="true">
+    <scroll class="wrapper" :pull-up-load="true" ref="scroll">
       <template #wrapper>
         <detail-swiper :top-images="topImages" />
         <detail-base-info :goods="goods" />
         <detail-shop-info :shop="shop" />
-        <detail-goods-info :detail-info="detailInfo"/>
+        <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad"/>
+        <detail-param-info :param-info="paramInfo"/>
       </template>
     </scroll>
   </div>
 </template>
 
 <script>
-import { getDetail,Goods,Shop } from "../../network/detail";
+import { getDetail,Goods,Shop,GoodsParam } from "../../network/detail";
 
 import DetailNavBar from "./childComps/DetailNavBar";
 import DetailSwiper from "./childComps/DetailSwiper";
 import DetailBaseInfo from "./childComps/DetailBaseInfo";
 import DetailShopInfo from "./childComps/DetailShopInfo";
 import DetailGoodsInfo from './childComps/DetailGoodsInfo';
+import DetailParamInfo from './childComps/DetailParamInfo.vue';
 
 import Scroll from "../../components/common/scroll/Scroll"
+
 
 
 export default {
@@ -33,21 +36,22 @@ export default {
     DetailBaseInfo,
     DetailShopInfo,
     DetailGoodsInfo, 
+    DetailParamInfo,
     Scroll
   },
   data() {
     return {
-      location: window.location.href,
+      // location: window.location.href,
       iid: null,
       topImages: [],
       goods: {},
       shop: {},
-      detailInfo:{}
-    };
+      detailInfo: {},
+      paramInfo: {}
+    }
   },
-  created() {},
-  mounted() {
-    //保存从home携带过来的id
+  created() {
+     //保存从home携带过来的id
     this.iid = this.$route.params.iid;
     console.log("this.iid: ", this.iid);
     //根据iid请求详情数据
@@ -66,22 +70,32 @@ export default {
       this.shop = new Shop(data.shopInfo);
       //获取商品详情数据
       this.detailInfo = data.detailInfo
+      //获取参数信息
+      this.paramInfo = new  GoodsParam(data.itemParams.info, data.itemParams.rule)
     });
+  },
+  mounted() {
+   
   },
   updated() {
     // console.log("rpops: ", rpops);
   },
-  methods: {},
+  methods: {
+    imageLoad(){
+      this.$refs.scroll.refresh()
+      console.log(this.$refs.scroll.scroll.y);
+    }
+  },
   computed: {
-    Location: () => {
-       console.log(this.location);
-      return this.location + Math.random();
-    },
+    // Location: () => {
+    //    console.log(this.location);
+    //   return this.location + Math.random();
+    // }
   },
   beforeDestory() {
     console.log("组件卸载！");
-  },
-};
+  }
+}
 </script>
  
 <style scoped>
