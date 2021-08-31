@@ -2,7 +2,7 @@
   <div class="detail">
     <!-- <div>{{ location }}</div> -->
     <detail-nav-bar class="detail-nav" />
-    <scroll class="wrapper" :pull-up-load="true" ref="scroll">
+    <scroll class="wrapper" ref="scroll">
       <template #wrapper>
         <detail-swiper :top-images="topImages" />
         <detail-base-info :goods="goods" />

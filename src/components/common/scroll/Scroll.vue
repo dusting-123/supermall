@@ -18,7 +18,7 @@ export default {
     },
     pullUpLoad:{
       type:Boolean,
-      default: false
+      default:true
     }
   },
   data() {
@@ -26,14 +26,19 @@ export default {
       scroll:null
     }
   },
+  onload(){
+    
+  },
   mounted(){
+    console.log('我是pullup',this.pullUpLoad);
+    console.log('我是probetype',this.probeType);
     //注册插件
     BScroll.use(Pullup)
     //创建BScroll对象
     this.scroll = new BScroll(this.$refs.wrapper,{
       probeType:this.probeType,
       click: true,
-      pullUpLoad:true
+      pullUpLoad:this.pullUpLoad
     })
     //监听滚动位置
     //if(this.probeType === 2 || this.probeType === 3){
