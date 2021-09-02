@@ -10,7 +10,7 @@
       <img 
         v-for="(item,index) in detailInfo.detailImage[0].list" 
         :key="index" 
-        :src="item"
+        :src="preImage"
         @load="imgLoad" 
         alt="">
     </div>
@@ -31,7 +31,8 @@ export default {
   data() {
     return {
       counter: 0,
-      imagesLength: 0
+      imagesLength: 0,
+      preImage:require('../../../assets/img/common/placeholder.png')
     }
   },
   watch:{
@@ -42,7 +43,8 @@ export default {
   },
   methods:{
     imgLoad(){
-      //console.log( this.detailInfo);
+      //  this.preImage =  JSON.stringify(this.detailInfo.detailImage[0].list[this.counter])
+       console.log(this.preImage);
        this.counter++
       // 判断, 所有的图片都加载完了, 那么进行一次回调就可以了.
       if(this.counter === this.imagesLength) {
@@ -94,7 +96,6 @@ export default {
     color: #333;
     font-size: 15px;
   }
-
   .info-list img {
     width: 100%;
   }

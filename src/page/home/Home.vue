@@ -15,7 +15,7 @@
     <scroll 
       class="wrapper"
       ref="scroll"
-      :probe-type="3"
+      :probeType="3"
       @scroll="contentScroll"
       :pullUpLoad="true"
       @pullingUp="loadMore"

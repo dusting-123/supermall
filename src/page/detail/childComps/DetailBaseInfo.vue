@@ -26,6 +26,7 @@
 
 <script>
 export default {
+  name:'DetailBaseInfo',
   props: {
     goods: {
       type:Object,

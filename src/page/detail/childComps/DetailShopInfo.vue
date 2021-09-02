@@ -39,6 +39,7 @@
 
 <script>
 export default {
+  name:"detailShopInfo",
   props: {
     shop:{
       type:Object,

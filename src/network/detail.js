@@ -42,3 +42,10 @@ export class GoodsParam {
     this.sizes = rule.tables;
   }
 }
+export class DetailInfo{
+  constructor(detailInfo) {
+    this.desc = detailInfo.desc
+    this.detailImage = detailInfo.detailImage
+
+  }
+}

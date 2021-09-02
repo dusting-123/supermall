@@ -11,14 +11,14 @@ import BScroll from '@better-scroll/core'
 import Pullup from '@better-scroll/pull-up'
 export default {
   name:'Scroll',
-  porps: {
+  props: {
     probeType: {
       type: Number,
       default: 0
     },
     pullUpLoad:{
       type:Boolean,
-      default:true
+      default:false
     }
   },
   data() {
@@ -30,8 +30,6 @@ export default {
     
   },
   mounted(){
-    console.log('我是pullup',this.pullUpLoad);
-    console.log('我是probetype',this.probeType);
     //注册插件
     BScroll.use(Pullup)
     //创建BScroll对象
@@ -65,6 +63,7 @@ export default {
       this.scroll && this.scroll.refresh()
     },
     getScrollY() {
+     
       return this.scroll?this.scroll.y:0
     }
   }

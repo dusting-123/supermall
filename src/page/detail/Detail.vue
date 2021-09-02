@@ -2,8 +2,8 @@
   <div class="detail">
     <!-- <div>{{ location }}</div> -->
     <detail-nav-bar class="detail-nav" />
-    <scroll class="wrapper" ref="scroll">
-      <template #wrapper>
+    <scroll class="wrapper" :probeType="3" :pullUpLoad="true" ref="scrolls">
+      <template #wrapper >
         <detail-swiper :top-images="topImages" />
         <detail-base-info :goods="goods" />
         <detail-shop-info :shop="shop" />
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { getDetail,Goods,Shop,GoodsParam } from "../../network/detail";
+import { getDetail,Goods,Shop,GoodsParam,DetailInfo} from "../../network/detail";
 
 import DetailNavBar from "./childComps/DetailNavBar";
 import DetailSwiper from "./childComps/DetailSwiper";
@@ -69,7 +69,7 @@ export default {
       //创建店铺信息
       this.shop = new Shop(data.shopInfo);
       //获取商品详情数据
-      this.detailInfo = data.detailInfo
+      this.detailInfo = new DetailInfo(data.detailInfo);
       //获取参数信息
       this.paramInfo = new  GoodsParam(data.itemParams.info, data.itemParams.rule)
     });
@@ -78,12 +78,13 @@ export default {
    
   },
   updated() {
+     this.$refs.scrolls.refresh()
     // console.log("rpops: ", rpops);
   },
   methods: {
     imageLoad(){
-      this.$refs.scroll.refresh()
-      console.log(this.$refs.scroll.scroll.y);
+      this.$refs.scrolls.refresh()
+      console.log(this.$refs.scrolls.scroll.y);
     }
   },
   computed: {

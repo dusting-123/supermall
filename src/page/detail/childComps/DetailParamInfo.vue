@@ -21,6 +21,7 @@
 
 <script>
 export default {
+  name:'DetailParamInfo',
   props:{
      paramInfo:{
        type:Object,
