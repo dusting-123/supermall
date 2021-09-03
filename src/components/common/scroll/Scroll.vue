@@ -59,7 +59,7 @@ export default {
      this.scroll && this.scroll.finishPullUp()
     },
     refresh() {
-      console.log('aaa');
+      console.log('当前scroll高度'+ this.scroll.y);
       this.scroll && this.scroll.refresh()
     },
     getScrollY() {

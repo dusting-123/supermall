@@ -1,7 +1,6 @@
 import { request } from "./request";
 
 export function getDetail (iid) {
-  console.log(iid+ '数据已请求');
   return request({
     url: '/detail',
     params: {
@@ -17,6 +16,7 @@ export class Goods {
     this.newPrice = itemInfo.price
     this.oldPrice = itemInfo.oldPrice
     this.discount = itemInfo.discountDesc
+    this.discountBgColor = itemInfo.discountBgColor
     this.columns = columns
     this.services = services
     this.realPrice = itemInfo.lowNowPrice
@@ -40,12 +40,5 @@ export class GoodsParam {
     this.image = info.images ? info.images[0] : '';
     this.infos = info.set;
     this.sizes = rule.tables;
-  }
-}
-export class DetailInfo{
-  constructor(detailInfo) {
-    this.desc = detailInfo.desc
-    this.detailImage = detailInfo.detailImage
-
   }
 }
